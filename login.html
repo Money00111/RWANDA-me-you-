@@ -10,14 +10,11 @@
 
 <link rel="stylesheet" href="css/auth.css">
 
-<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- Font Awesome -->
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-<!-- Country Phone Library -->
 <link rel="stylesheet"
 href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/css/intlTelInput.css">
 
@@ -26,11 +23,9 @@ href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/css/intlTelInput.
 <body>
 
 <div class="background">
-
 <div class="blue"></div>
 <div class="yellow"></div>
 <div class="green"></div>
-
 </div>
 
 <div class="login-card">
@@ -41,76 +36,50 @@ href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/css/intlTelInput.
 
 <h1>RWANDA <span>Me&You</span></h1>
 
-<p class="welcome">
-
-Connect with people around the world.
-
-</p>
+<p class="welcome">Connect with people around the world.</p>
 
 <form id="loginForm">
 
 <label>
-
 <i class="fa-solid fa-phone"></i>
-
 Phone Number
-
 </label>
 
-<input
-id="phone"
-type="tel"
-placeholder="Enter phone number"
-required>
+<!-- PHONE INPUT WRAPPER (IMPORTANT FIX) -->
+<div class="phone-box">
+<input id="phone" type="tel" placeholder="Enter phone number" required>
+</div>
 
+<!-- RECAPTCHA -->
 <div id="recaptcha-container"></div>
 
-<button
-class="login-btn"
-id="sendCode"
-type="submit">
-
+<button class="login-btn" id="sendCode" type="submit">
 <i class="fa-solid fa-paper-plane"></i>
-
 Send Verification Code
-
 </button>
 
 </form>
 
 <div class="divider">
-
 <span>or</span>
-
 </div>
 
-<button class="guest-btn">
-
+<button class="guest-btn" id="guestBtn">
 <i class="fa-solid fa-user"></i>
-
 Continue as Guest
-
 </button>
 
 <div class="terms">
-
 <p>
-
 By continuing you agree to our
-
-<a href="#">Terms</a>
-
-and
-
+<a href="#">Terms</a> and
 <a href="#">Privacy Policy</a>
-
 </p>
-
 </div>
 
 </div>
 
-<!-- Country Library -->
+<!-- Country library -->
 <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/js/intlTelInput.min.js"></script>
 
 <!-- Firebase -->
