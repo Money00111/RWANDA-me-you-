@@ -1,56 +1,76 @@
-import 'package:flutter/material.dart';
+<!DOCTYPE html>
+<html lang="en">
 
-void main() {
-  runApp(const RwandaMeYouApp());
-}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-class RwandaMeYouApp extends StatelessWidget {
-  const RwandaMeYouApp({super.key});
+<title>RWANDA Me&You</title>
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'RWANDA Me&You',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0077C8),
-        ),
-        useMaterial3: true,
-      ),
-      home: const SplashScreen(),
-    );
-  }
-}
+<link rel="stylesheet" href="css/auth.css">
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0077C8),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(
-              Icons.chat_bubble_rounded,
-              size: 90,
-              color: Colors.white,
-            ),
-            SizedBox(height: 20),
-            Text(
-              "RWANDA Me&You",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+<!-- Icons -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<!-- LOGIN CARD -->
+<div class="container">
+
+  <div class="logo">
+    <i class="fa-solid fa-comments"></i>
+  </div>
+
+  <h1>RWANDA <span>Me&You</span></h1>
+
+  <p class="subtitle">
+    Connect with people in a simple and secure way
+  </p>
+
+  <!-- FORM -->
+  <form id="loginForm">
+
+    <label>Phone Number</label>
+
+    <div class="phone-box">
+      <input id="phone" type="tel" placeholder="Enter phone number" required>
+    </div>
+
+    <!-- Firebase reCAPTCHA -->
+    <div id="recaptcha-container"></div>
+
+    <button id="sendCode" type="submit" class="btn primary">
+      <i class="fa-solid fa-paper-plane"></i>
+      Send Code
+    </button>
+
+  </form>
+
+  <button id="guestBtn" class="btn guest">
+    <i class="fa-solid fa-user"></i>
+    Continue as Guest
+  </button>
+
+  <p class="terms">
+    By continuing you agree to Terms & Privacy Policy
+  </p>
+
+</div>
+
+</body>
+
+<!-- intl-tel-input -->
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/js/intlTelInput.min.js"></script>
+
+<!-- Firebase Auth JS -->
+<script type="module" src="js/auth.js"></script>
+
+</html>
