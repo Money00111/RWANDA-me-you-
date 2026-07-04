@@ -1,100 +1,102 @@
 import { auth } from "./firebase.js";
-import { RecaptchaVerifier, signInWithPhoneNumber } 
-from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+import {
+RecaptchaVerifier,
+signInWithPhoneNumber
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
 
-// =====================================
-// INIT PHONE INPUT (intl-tel-input)
-// =====================================
+// ===============================
+// PHONE INPUT (COUNTRY CODES)
+// ===============================
 
 const phoneInput = document.querySelector("#phone");
 
 const iti = window.intlTelInput(phoneInput, {
-  initialCountry: "rw",
-  preferredCountries: ["rw","ke","ug","tz","ng","us","gb"],
-  separateDialCode: true,
-  utilsScript:
-    "https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/js/utils.js",
+initialCountry: "rw",
+preferredCountries: ["rw","ke","ug","tz","ng","us","gb"],
+separateDialCode: true,
+utilsScript:
+"https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/js/utils.js",
 });
 
 
-// =====================================
+// ===============================
 // RECAPTCHA
-// =====================================
+// ===============================
 
 window.recaptchaVerifier = new RecaptchaVerifier(
-  auth,
-  "recaptcha-container",
-  {
-    size: "invisible",
-  }
+auth,
+"recaptcha-container",
+{
+size: "invisible"
+}
 );
 
 
-// =====================================
+// ===============================
 // GET FULL NUMBER
-// =====================================
+// ===============================
 
-function getPhoneNumber() {
-  return iti.getNumber();
+function getNumber() {
+return iti.getNumber(); // +250..., +254...
 }
 
 
-// =====================================
-// SEND OTP
-// =====================================
+// ===============================
+// SEND CODE (FIXED)
+// ===============================
 
 const form = document.querySelector("#loginForm");
 const sendBtn = document.querySelector("#sendCode");
 
 form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+e.preventDefault();
 
-  try {
-    sendBtn.innerText = "Sending...";
-    sendBtn.disabled = true;
+sendBtn.innerHTML = "Sending...";
+sendBtn.disabled = true;
 
-    const number = getPhoneNumber();
+try {
 
-    if (!number) {
-      alert("Enter valid phone number");
-      sendBtn.innerText = "Send Verification Code";
-      sendBtn.disabled = false;
-      return;
-    }
+const number = getNumber();
 
-    const appVerifier = window.recaptchaVerifier;
+if (!number) {
+alert("Enter valid phone number");
+sendBtn.innerHTML = "Send Verification Code";
+sendBtn.disabled = false;
+return;
+}
 
-    const confirmation = await signInWithPhoneNumber(
-      auth,
-      number,
-      appVerifier
-    );
+const appVerifier = window.recaptchaVerifier;
 
-    window.confirmationResult = confirmation;
+const confirmation = await signInWithPhoneNumber(
+auth,
+number,
+appVerifier
+);
 
-    sendBtn.innerText = "Code Sent ✔";
+window.confirmationResult = confirmation;
 
-    // 👉 SHOW OTP SCREEN
-    showOTPInput();
+sendBtn.innerHTML = "Code Sent ✔";
 
-  } catch (err) {
-    console.error(err);
-    alert("Failed to send code");
+// 👉 NEXT STEP: OTP SCREEN (you already have)
+showOTPInput();
 
-    sendBtn.innerText = "Send Verification Code";
-    sendBtn.disabled = false;
-  }
+} catch (err) {
+console.error(err);
+
+alert("Failed to send code");
+
+sendBtn.innerHTML = "Send Verification Code";
+sendBtn.disabled = false;
+}
 });
 
 
-// =====================================
+// ===============================
 // GUEST BUTTON FIX
-// =====================================
+// ===============================
 
-const guestBtn = document.querySelector(".guest-btn");
-
-guestBtn.addEventListener("click", () => {
-  // simple bypass login
-  window.location.href = "home.html";
+document.querySelector("#guestBtn")
+.addEventListener("click", () => {
+window.location.href = "home.html";
 });
