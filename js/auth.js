@@ -54,6 +54,8 @@ let loading = false;
 // =============================
 // SEND CODE (FIXED CORE)
 // =============================
+window.confirmationResult = confirmation;
+window.location.href = "otp.html";
 
 form.addEventListener("submit", async (e) => {
 e.preventDefault();
