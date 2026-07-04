@@ -6,7 +6,7 @@ signInWithPhoneNumber
 
 
 // ===============================
-// PHONE INPUT (COUNTRY CODES FIX)
+// INIT PHONE INPUT
 // ===============================
 
 const phoneInput = document.querySelector("#phone");
@@ -21,63 +21,45 @@ utilsScript:
 
 
 // ===============================
-// RECAPTCHA (FIXED SAFE INIT)
+// RECAPTCHA (SAFE INIT)
 // ===============================
 
 window.recaptchaVerifier = new RecaptchaVerifier(
 auth,
 "recaptcha-container",
-{
-size: "invisible"
-}
+{ size: "invisible" }
 );
 
 
 // ===============================
-// GET FULL NUMBER (FIXED)
-// ===============================
-
-function getPhoneNumber() {
-const number = iti.getNumber();
-return number;
-}
-
-
-// ===============================
-// BUTTON ELEMENTS
+// BUTTONS
 // ===============================
 
 const form = document.querySelector("#loginForm");
 const sendBtn = document.querySelector("#sendCode");
 const guestBtn = document.querySelector("#guestBtn");
 
-let isSending = false;
+let loading = false;
 
 
 // ===============================
-// SEND OTP (FIXED NO STUCK)
+// SEND CODE (FIXED 100%)
 // ===============================
 
 form.addEventListener("submit", async (e) => {
 e.preventDefault();
 
-if (isSending) return;
+if (loading) return;
 
-isSending = true;
-
-sendBtn.innerHTML = "Sending...";
+loading = true;
+sendBtn.innerText = "Sending...";
 sendBtn.disabled = true;
 
 try {
 
-const number = getPhoneNumber();
+const number = iti.getNumber();
 
-if (!number || number.length < 8) {
-alert("Enter valid phone number");
-
-resetButton();
-return;
-}
+if (!number) throw new Error("Invalid number");
 
 const appVerifier = window.recaptchaVerifier;
 
@@ -89,46 +71,27 @@ appVerifier
 
 window.confirmationResult = confirmation;
 
-sendBtn.innerHTML = "Code Sent ✔";
+sendBtn.innerText = "Code Sent ✔";
 
-// move to OTP screen
-showOTPInput();
+// next step (you will add OTP page later)
+alert("OTP sent to " + number);
 
 } catch (err) {
-console.error(err);
-alert("Failed to send code. Try again.");
+console.log(err);
 
-resetButton();
+alert("Failed to send code");
+
+sendBtn.innerText = "Send Code";
+sendBtn.disabled = false;
+loading = false;
 }
-
 });
 
 
 // ===============================
-// RESET BUTTON (IMPORTANT FIX)
-// ===============================
-
-function resetButton() {
-isSending = false;
-sendBtn.innerHTML = "Send Verification Code";
-sendBtn.disabled = false;
-}
-
-
-// ===============================
-// GUEST BUTTON (FIXED)
+// GUEST (WORKING 100%)
 // ===============================
 
 guestBtn.addEventListener("click", () => {
 window.location.href = "home.html";
 });
-
-
-// ===============================
-// OTP SCREEN HOOK
-// ===============================
-
-window.showOTPInput = function () {
-alert("OTP sent! (Next step will be verification screen)");
-resetButton();
-};
