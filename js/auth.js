@@ -94,7 +94,7 @@ form.addEventListener("submit", async (e) => {
     );
 
     window.confirmationResult = confirmation;
-
+showOTPInput();
     sendBtn.innerHTML = "Code Sent ✔";
     console.log("OTP sent successfully");
 
