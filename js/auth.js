@@ -66,12 +66,9 @@ auth,
 number,
 window.recaptchaVerifier
 );
-
 window.confirmationResult = confirmation;
 
-sendBtn.innerText = "Code Sent ✔";
-
-alert("OTP sent to " + number);
+showOTPBox();
 
 } catch (err) {
 
