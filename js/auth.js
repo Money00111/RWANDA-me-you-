@@ -1,111 +1,201 @@
-import { auth } from "./firebase.js";
+function showOTPBox() {
 
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber
-} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+const box = document.createElement("div");
+
+box.innerHTML = `
+<div style="
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:25px;
+border-radius:15px;
+width:90%;
+max-width:350px;
+text-align:center;
+font-family:Poppins;
+">
+
+<h2>Enter OTP</h2>
+
+<p>Code sent to your phone</p>
+
+<input id="otpInput" type="text" maxlength="6"
+style="
+width:100%;
+padding:12px;
+margin-top:15px;
+font-size:18px;
+text-align:center;
+border:1px solid #ccc;
+border-radius:10px;
+outline:none;
+">
+
+<button id="verifyBtn"
+style="
+margin-top:15px;
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:linear-gradient(135deg,#0077C8,#00A86B);
+color:white;
+font-weight:700;
+cursor:pointer;
+">
+Verify
+</button>
+
+</div>
+
+</div>
+`;
+
+document.body.appendChild(box);
 
 
-// =====================================
-// RWANDA Me&You - AUTH PART 1
-// Phone Input + Country Styling
-// =====================================
+// =========================
+// VERIFY OTP
+// =========================
 
+document.getElementById("verifyBtn").onclick = async () => {
 
-// 🌍 Initialize international phone input
-const phoneInput = document.querySelector("#phone");
+const code = document.getElementById("otpInput").value;
 
-const iti = window.intlTelInput(phoneInput, {
-  initialCountry: "rw",
-  preferredCountries: ["rw", "ke", "ug", "tz", "ng", "us", "gb"],
-  separateDialCode: true,
-  utilsScript:
-    "https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/js/utils.js",
-});
-
-
-// 🎨 Stylish input focus effects
-phoneInput.style.padding = "16px";
-phoneInput.style.borderRadius = "18px";
-phoneInput.style.border = "2px solid rgba(255,255,255,0.3)";
-phoneInput.style.fontSize = "16px";
-phoneInput.style.fontWeight = "600";
-phoneInput.style.outline = "none";
-phoneInput.style.width = "100%";
-phoneInput.style.transition = "0.3s";
-
-phoneInput.addEventListener("focus", () => {
-  phoneInput.style.border = "2px solid #FAD201";
-  phoneInput.style.boxShadow = "0 0 15px rgba(250,210,1,0.4)";
-});
-
-phoneInput.addEventListener("blur", () => {
-  phoneInput.style.border = "2px solid rgba(255,255,255,0.3)";
-  phoneInput.style.boxShadow = "none";
-});
-
-
-// 📱 Format phone number properly
-function getFullPhoneNumber() {
-  return iti.getNumber(); // returns +2507..., +254..., etc.
+if (!code || code.length < 6) {
+alert("Enter valid OTP");
+return;
 }
 
+try {
 
-// =====================================
-// Firebase Recaptcha setup
-// =====================================
+document.getElementById("verifyBtn").innerText = "Verifying...";
 
-window.recaptchaVerifier = new RecaptchaVerifier(
-  auth,
-  "recaptcha-container",
-  {
-    size: "invisible",
-    callback: (response) => {
-      console.log("Recaptcha solved");
-    },
-  }
-);
+const result = await window.confirmationResult.confirm(code);
+
+const user = result.user;
+
+console.log("Logged in:", user.phoneNumber);
+
+// success → go home
+window.location.href = "home.html";
+
+} catch (err) {
+console.log(err);
+alert("Invalid OTP");
+document.getElementById("verifyBtn").innerText = "Verify";
+}
+
+};
+
+}
+
+function showOTPBox() {
+
+const box = document.createElement("div");
+
+box.innerHTML = `
+<div style="
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:25px;
+border-radius:15px;
+width:90%;
+max-width:350px;
+text-align:center;
+font-family:Poppins;
+">
+
+<h2>Enter OTP</h2>
+
+<p>Code sent to your phone</p>
+
+<input id="otpInput" type="text" maxlength="6"
+style="
+width:100%;
+padding:12px;
+margin-top:15px;
+font-size:18px;
+text-align:center;
+border:1px solid #ccc;
+border-radius:10px;
+outline:none;
+">
+
+<button id="verifyBtn"
+style="
+margin-top:15px;
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:linear-gradient(135deg,#0077C8,#00A86B);
+color:white;
+font-weight:700;
+cursor:pointer;
+">
+Verify
+</button>
+
+</div>
+
+</div>
+`;
+
+document.body.appendChild(box);
 
 
-// =====================================
-// Send OTP (PART 1)
-// =====================================
+// =========================
+// VERIFY OTP
+// =========================
 
-const form = document.querySelector("#loginForm");
-const sendBtn = document.querySelector("#sendCode");
+document.getElementById("verifyBtn").onclick = async () => {
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+const code = document.getElementById("otpInput").value;
 
-  sendBtn.innerHTML = "Sending...";
-  sendBtn.disabled = true;
+if (!code || code.length < 6) {
+alert("Enter valid OTP");
+return;
+}
 
-  try {
-    const phoneNumber = getFullPhoneNumber();
+try {
 
-    console.log("Sending OTP to:", phoneNumber);
+document.getElementById("verifyBtn").innerText = "Verifying...";
 
-    const appVerifier = window.recaptchaVerifier;
+const result = await window.confirmationResult.confirm(code);
 
-    const confirmation = await signInWithPhoneNumber(
-      auth,
-      phoneNumber,
-      appVerifier
-    );
+const user = result.user;
 
-    window.confirmationResult = confirmation;
+console.log("Logged in:", user.phoneNumber);
 
-    sendBtn.innerHTML = "Code Sent ✔";
-    console.log("OTP sent successfully");
+// success → go home
+window.location.href = "home.html";
 
-    // next step will be OTP verification (Part 2)
+} catch (err) {
+console.log(err);
+alert("Invalid OTP");
+document.getElementById("verifyBtn").innerText = "Verify";
+}
 
-  } catch (error) {
-    console.error(error);
+};
 
-    sendBtn.innerHTML = "Send Verification Code";
-    sendBtn.disabled = false;
-
-    alert("Error sending code. Check number or internet.");
-  }
-});
+}
