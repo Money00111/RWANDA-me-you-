@@ -120,12 +120,20 @@ Sending...
 `;
 
 try{
+const rawNumber = phoneInput.value.trim();
 
-const phoneNumber=iti.getNumber();
+if (rawNumber === "") {
+  alert("Please enter your phone number.");
+  loading = false;
+  sendBtn.disabled = false;
+  sendBtn.innerHTML = `
+    <i class="fa-solid fa-paper-plane"></i>
+    Send Code
+  `;
+  return;
+}
 
-if(!phoneNumber){
-
-throw new Error("Enter phone number");
+const number = iti.getNumber();
 
 }
 
