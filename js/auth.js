@@ -73,12 +73,13 @@ sendBtn.innerText = "Code Sent ✔";
 
 alert("OTP sent to " + number);
 
-} catch (err) {
+} catch(error){
 
-console.log(err);
+console.error(error);
 
-alert("Failed to send code");
+alert(error.code + "\n\n" + error.message);
 
+}
 sendBtn.innerText = "Send Code";
 sendBtn.disabled = false;
 loading = false;
