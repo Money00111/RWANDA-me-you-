@@ -1,198 +1,423 @@
+// ======================================
+// RWANDA Me&You
+// auth.js - PART 1
+// ======================================
+
 import { auth } from "./firebase.js";
+
 import {
 RecaptchaVerifier,
 signInWithPhoneNumber
+
 } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
 
-// =========================
-// INIT PHONE INPUT
-// =========================
-
-const phoneInput = document.querySelector("#phone");
-
-const iti = window.intlTelInput(phoneInput, {
-initialCountry: "rw",
-preferredCountries: ["rw","ke","ug","tz","ng","us","gb"],
-separateDialCode: true,
-utilsScript:
-"https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/js/utils.js"
-});
-
-
-// =========================
-// RECAPTCHA
-// =========================
-
-window.recaptchaVerifier = new RecaptchaVerifier(
-auth,
-"recaptcha-container",
-{ size: "invisible" }
-);
-
-
-// =========================
+// ================================
 // ELEMENTS
-// =========================
+// ================================
 
-const form = document.querySelector("#loginForm");
-const sendBtn = document.querySelector("#sendCode");
-const guestBtn = document.querySelector("#guestBtn");
+const form = document.getElementById("loginForm");
+const phoneInput = document.getElementById("phone");
+const sendBtn = document.getElementById("sendCode");
+const guestBtn = document.getElementById("guestBtn");
 
 let loading = false;
 
 
-// =========================
-// SEND OTP (CLEAN)
-// =========================
+// ================================
+// PHONE INPUT
+// ================================
 
-form.addEventListener("submit", async (e) => {
-e.preventDefault();
+const iti = window.intlTelInput(phoneInput,{
 
-if (loading) return;
-loading = true;
+initialCountry:"rw",
 
-sendBtn.innerText = "Sending...";
-sendBtn.disabled = true;
+preferredCountries:[
+"rw",
+"ke",
+"ug",
+"tz",
+"bi",
+"cd",
+"ng",
+"za",
+"us",
+"gb"
+],
 
-try {
+separateDialCode:true,
 
-const number = iti.getNumber();
+autoPlaceholder:"aggressive",
 
-if (!number) throw new Error("Invalid phone number");
+utilsScript:
+"https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/js/utils.js"
 
-const confirmation = await signInWithPhoneNumber(
+});
+
+
+// ================================
+// RECAPTCHA
+// ================================
+
+let recaptchaVerifier;
+
+function initRecaptcha(){
+
+if(recaptchaVerifier){
+
+return recaptchaVerifier;
+
+}
+
+recaptchaVerifier = new RecaptchaVerifier(
+
 auth,
-number,
-window.recaptchaVerifier
+
+"recaptcha-container",
+
+{
+
+size:"invisible",
+
+callback:()=>{
+
+console.log("reCAPTCHA verified");
+
+},
+
+'expired-callback':()=>{
+
+console.log("reCAPTCHA expired");
+
+}
+
+}
+
 );
 
-window.confirmationResult = confirmation;
+return recaptchaVerifier;
 
-sendBtn.innerText = "Code Sent ✔";
+}
 
-alert("OTP sent to " + number);
 
-} catch(error){
+// ================================
+// SEND CODE
+// ================================
+
+form.addEventListener("submit",async(e)=>{
+
+e.preventDefault();
+
+if(loading) return;
+
+loading=true;
+
+sendBtn.disabled=true;
+
+sendBtn.innerHTML=`
+<i class="fa-solid fa-spinner fa-spin"></i>
+Sending...
+`;
+
+try{
+
+const phoneNumber=iti.getNumber();
+
+if(!phoneNumber){
+
+throw new Error("Enter phone number");
+
+}
+
+const appVerifier=initRecaptcha();
+
+const confirmationResult=
+
+await signInWithPhoneNumber(
+
+auth,
+
+phoneNumber,
+
+appVerifier
+
+);
+
+// Save globally
+window.confirmationResult=confirmationResult;
+
+sendBtn.innerHTML=`
+<i class="fa-solid fa-check"></i>
+Code Sent
+`;
+
+loading=false;
+
+sendBtn.disabled=false;
+
+// OTP popup
+showOTPBox();
+
+}catch(error){
 
 console.error(error);
 
-alert(error.code + "\n\n" + error.message);
+alert(
 
-}
-sendBtn.innerText = "Send Code";
-sendBtn.disabled = false;
-loading = false;
+(error.code || "Error")
+
++"\n\n"+
+
+(error.message || "Failed to send code")
+
+);
+
+loading=false;
+
+sendBtn.disabled=false;
+
+sendBtn.innerHTML=`
+<i class="fa-solid fa-paper-plane"></i>
+Send Code
+`;
+
 }
 
 });
 
+// ======================================
+// RWANDA Me&You
+// auth.js - PART 2
+// ======================================
 
-// =========================
-// GUEST LOGIN
-// =========================
 
-guestBtn.addEventListener("click", () => {
-window.location.href = "home.html";
-});
+// ================================
+// OTP POPUP
+// ================================
 
-function showOTPBox() {
+function showOTPBox(){
 
-const box = document.createElement("div");
+const overlay=document.createElement("div");
 
-box.innerHTML = `
+overlay.id="otpOverlay";
+
+overlay.innerHTML=`
+
 <div style="
 position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.6);
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.65);
 display:flex;
 justify-content:center;
 align-items:center;
 z-index:9999;
+padding:20px;
 ">
 
 <div style="
-background:white;
+width:100%;
+max-width:360px;
+background:#fff;
+border-radius:22px;
 padding:25px;
-border-radius:15px;
-width:90%;
-max-width:350px;
 text-align:center;
-font-family:Poppins;
+box-shadow:0 20px 60px rgba(0,0,0,.25);
 ">
 
-<h2>Enter OTP</h2>
+<h2 style="
+margin-bottom:10px;
+color:#0077C8;
+">
+Verify Phone
+</h2>
 
-<p>Code sent to your phone</p>
+<p style="
+margin-bottom:20px;
+color:#555;
+font-size:14px;
+">
+Enter the 6 digit code sent to your phone.
+</p>
 
-<input id="otpInput" type="text" maxlength="6"
+<input
+id="otpInput"
+type="text"
+maxlength="6"
+placeholder="123456"
+
 style="
 width:100%;
-padding:12px;
-margin-top:15px;
-font-size:18px;
+padding:15px;
+font-size:22px;
+letter-spacing:6px;
 text-align:center;
-border:1px solid #ccc;
-border-radius:10px;
+border:2px solid #ddd;
+border-radius:14px;
 outline:none;
 ">
 
-<button id="verifyBtn"
+<button
+id="verifyBtn"
+
 style="
-margin-top:15px;
+margin-top:20px;
 width:100%;
-padding:12px;
+padding:15px;
 border:none;
-border-radius:10px;
+border-radius:14px;
+cursor:pointer;
+font-size:16px;
+font-weight:700;
 background:linear-gradient(135deg,#0077C8,#00A86B);
 color:white;
-font-weight:700;
-cursor:pointer;
 ">
-Verify
+
+Verify Code
+
+</button>
+
+<button
+id="closeOTP"
+
+style="
+margin-top:10px;
+width:100%;
+padding:13px;
+border:none;
+border-radius:14px;
+cursor:pointer;
+font-size:15px;
+font-weight:600;
+background:#efefef;
+">
+
+Cancel
+
 </button>
 
 </div>
 
 </div>
+
 `;
 
-document.body.appendChild(box);
+document.body.appendChild(overlay);
 
 
-// =========================
+// ================================
+// CLOSE
+// ================================
+
+document
+.getElementById("closeOTP")
+.onclick=()=>{
+
+overlay.remove();
+
+};
+
+
+// ================================
 // VERIFY OTP
-// =========================
+// ================================
 
-document.getElementById("verifyBtn").onclick = async () => {
+document
+.getElementById("verifyBtn")
+.onclick=async()=>{
 
-const code = document.getElementById("otpInput").value;
+const verifyBtn=
+document.getElementById("verifyBtn");
 
-if (!code || code.length < 6) {
+const code=
+document.getElementById("otpInput")
+.value
+.trim();
+
+if(code.length!==6){
+
 alert("Enter valid OTP");
+
 return;
+
 }
 
-try {
+verifyBtn.disabled=true;
 
-document.getElementById("verifyBtn").innerText = "Verifying...";
+verifyBtn.innerHTML=`
+<i class="fa-solid fa-spinner fa-spin"></i>
+Verifying...
+`;
 
-const result = await window.confirmationResult.confirm(code);
+try{
 
-const user = result.user;
+const result=
 
-console.log("Logged in:", user.phoneNumber);
+await window
+.confirmationResult
+.confirm(code);
 
-// success → go home
-window.location.href = "home.html";
+console.log(result.user);
 
-} catch (err) {
-console.log(err);
-alert("Invalid OTP");
-document.getElementById("verifyBtn").innerText = "Verify";
+window.location.href="home.html";
+
+}catch(error){
+
+console.error(error);
+
+alert(
+
+error.code+
+
+"\n\n"+
+
+error.message
+
+);
+
+verifyBtn.disabled=false;
+
+verifyBtn.innerHTML="Verify Code";
+
 }
 
 };
 
-  }
+}
+
+
+
+// ================================
+// GUEST LOGIN
+// ================================
+
+guestBtn.addEventListener("click",()=>{
+
+window.location.href="home.html";
+
+});
+
+
+
+// ================================
+// ENTER KEY OTP
+// ================================
+
+document.addEventListener("keydown",(e)=>{
+
+if(e.key==="Enter"){
+
+const btn=
+document.getElementById("verifyBtn");
+
+if(btn){
+
+btn.click();
+
+}
+
+}
+
+});
