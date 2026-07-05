@@ -69,6 +69,8 @@ window.recaptchaVerifier
 
 window.confirmationResult = confirmation;
 
+showOTPBox();
+
 sendBtn.innerText = "Code Sent ✔";
 
 alert("OTP sent to " + number);
