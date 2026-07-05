@@ -119,7 +119,6 @@ sendBtn.innerHTML=`
 Sending...
 `;
 
-try{
 const rawNumber = phoneInput.value.trim();
 
 if (rawNumber === "") {
