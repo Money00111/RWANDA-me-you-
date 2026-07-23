@@ -4,171 +4,216 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create Account - Me&You</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="../../assets/css/variables.css">
-<link rel="stylesheet" href="register.css">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>
+Create Account - Me&You
+</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="../../assets/css/variables.css">
+
+
+<link rel="stylesheet"
+href="register.css">
+
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+
 </head>
+
 
 <body>
 
-<div class="background">
 
-<div class="blue"></div>
-<div class="yellow"></div>
-<div class="green"></div>
+<div class="register-container">
 
-</div>
-
-<div class="register-card">
 
 <div class="logo">
-
 <i class="fa-solid fa-heart"></i>
-
 </div>
 
+
 <h1>
-
 Me<span>&You</span>
-
 </h1>
 
-<p class="subtitle">
 
-Create your account and start meeting new people.
-
+<p>
+Create your account and meet new people.
 </p>
+
+
 
 <form id="registerForm">
 
-<div class="input-group">
+
+<div class="input-box">
 
 <i class="fa-solid fa-user"></i>
 
 <input
+
+id="name"
+
 type="text"
-id="fullName"
+
 placeholder="Full Name"
+
 required>
 
 </div>
 
-<div class="input-group">
+
+
+
+<div class="input-box">
 
 <i class="fa-solid fa-envelope"></i>
 
 <input
-type="email"
+
 id="email"
-placeholder="Email Address"
+
+type="email"
+
+placeholder="Email"
+
 required>
 
 </div>
 
-<div class="input-group">
+
+
+
+
+<div class="input-box">
 
 <i class="fa-solid fa-lock"></i>
 
 <input
-type="password"
+
 id="password"
+
+type="password"
+
 placeholder="Password"
+
 required>
 
+
+
 <button
+
 type="button"
-class="togglePassword"
-data-target="password">
+
+class="show-password"
+
+data-id="password">
 
 <i class="fa-solid fa-eye"></i>
 
 </button>
 
+
 </div>
 
-<div class="input-group">
+
+
+
+
+<div class="input-box">
 
 <i class="fa-solid fa-lock"></i>
 
 <input
-type="password"
+
 id="confirmPassword"
+
+type="password"
+
 placeholder="Confirm Password"
+
 required>
 
+
+
 <button
+
 type="button"
-class="togglePassword"
-data-target="confirmPassword">
+
+class="show-password"
+
+data-id="confirmPassword">
 
 <i class="fa-solid fa-eye"></i>
 
 </button>
 
+
 </div>
 
-<label class="checkbox">
+
+
+
+
+<label class="terms">
+
 
 <input
+
 type="checkbox"
+
 id="terms"
+
 required>
+
+
 
 <span>
 
-I agree to the
-<a href="#">Terms</a>
-and
-<a href="#">Privacy Policy</a>
+I agree to Terms & Privacy Policy
 
 </span>
 
+
 </label>
 
-<button
-type="submit"
-id="registerBtn"
-class="register-btn">
 
-<i class="fa-solid fa-user-plus"></i>
+
+
+
+<button
+
+id="registerBtn"
+
+type="submit">
+
 
 Create Account
 
+
 </button>
+
+
+
 
 </form>
 
-<div class="divider">
 
-<span>OR</span>
 
-</div>
 
-<button
-id="googleBtn"
-class="google-btn">
+<p class="bottom-text">
 
-<i class="fa-brands fa-google"></i>
 
-Continue with Google
+Already have account?
 
-</button>
-
-<p class="login-text">
-
-Already have an account?
 
 <a href="../login/login.html">
 
@@ -176,11 +221,24 @@ Login
 
 </a>
 
+
 </p>
+
+
 
 </div>
 
-<script type="module" src="register.js"></script>
+
+
+
+<script
+
+type="module"
+
+src="register.js">
+
+</script>
+
 
 </body>
 
