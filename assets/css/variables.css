@@ -1,0 +1,28 @@
+/* =====================================
+RWANDA Me&You
+Global Colors
+===================================== */
+
+
+:root{
+
+--primary:#0077C8;
+
+--secondary:#00A86B;
+
+--yellow:#F7C600;
+
+--white:#FFFFFF;
+
+--black:#111111;
+
+--gray:#777777;
+
+
+--radius:20px;
+
+
+--shadow:
+0 10px 30px rgba(0,0,0,0.15);
+
+}
