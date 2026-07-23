@@ -176,3 +176,33 @@ email
 
 
 }
+
+// ===============================
+// RESET PASSWORD
+// ===============================
+
+import {
+
+sendPasswordResetEmail
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+
+
+export async function resetPassword(email){
+
+
+await sendPasswordResetEmail(
+
+auth,
+
+email
+
+);
+
+
+}
