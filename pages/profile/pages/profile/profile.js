@@ -31,7 +31,54 @@ from
 
 "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
+import {
 
+ref,
+uploadBytes,
+getDownloadURL
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
+
+
+import {
+
+storage
+
+}
+
+from "../../services/firebase.js";
+
+
+
+let selectedPhoto = null;
+
+
+
+document
+.getElementById("photoInput")
+.addEventListener(
+"change",
+
+(e)=>{
+
+
+selectedPhoto =
+e.target.files[0];
+
+
+const preview =
+document.getElementById("profilePreview");
+
+
+preview.src =
+URL.createObjectURL(selectedPhoto);
+
+
+});
 
 const form =
 document.getElementById("profileForm");
