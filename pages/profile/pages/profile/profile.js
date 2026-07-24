@@ -182,7 +182,45 @@ db,
 currentUser.uid
 );
 
+let photoURL = "";
 
+
+
+if(selectedPhoto){
+
+
+const photoRef =
+
+ref(
+
+storage,
+
+"profilePhotos/" +
+
+currentUser.uid +
+
+"/profile.jpg"
+
+);
+
+
+
+await uploadBytes(
+
+photoRef,
+
+selectedPhoto
+
+);
+
+
+
+photoURL =
+
+await getDownloadURL(photoRef);
+
+
+}
 
 await updateDoc(
 
